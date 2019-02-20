@@ -18,17 +18,11 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/default_css.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/animate.css">
-    <!--[if lt IE 9]>
-    <script src="assets/js/html5shiv.min.js"></script>
-    <script src="assets/js/respond.min.js"></script>
-    <![endif]-->
 
-    <!--    Online CSS & JS-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all.css"
-          rel="stylesheet"/>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/locale/locale-ko.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="<?php //cho base_url(); ?>css/jquery.autocomplete.css">
+
+
 
     <!--Custom CSS In Folders  -->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/custom-css-mizan.css">
@@ -38,6 +32,9 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/common/link.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/tcal.js"></script>
+
+    <script type="text/javascript" src="<?php echo base_url(); ?>js/custom/jquery-ui.js"></script>
+
 
 </head>
 

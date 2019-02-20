@@ -101,14 +101,12 @@ class Common_Model extends CI_Model
 		}
 	}
 	
-	public function getAll($table, $col = null, $val = null)
+	public function getAll($table, $col = null, $val = null, $col2 = null,
+	    $val2 = null, $col3 = null, $val3 = null,$order=null,$order_val=null)
     {
 
         $w = $this->common->getSessionUserList(1);;
 
-        //if(!empty($w) && $table != 'setting')
-        //$this->db->where('ware',$w);
-        //print_r($w);
         if (!empty($w))
             $this->db->where("(ware='" . $w . "' OR ware='0')");
 
@@ -117,12 +115,24 @@ class Common_Model extends CI_Model
         if (!empty($module))
             $this->db->where("(module='" . $module . "' OR module='0')");
 
-        $this->db->order_by('id', 'DESC');
+		if (!empty($order))
+			$this->db->order_by($order, $order);
+		else if($table != "payment_info")
+        	$this->db->order_by('id', 'DESC');
+
+		$this->db->where("trace","0");
 
         if (!empty($col))
-            $this->db->where($col, $val);
-        
-        $info = $this->db->get($table);
+			$this->db->where($col, $val);
+			
+		if (!empty($col2))
+            $this->db->where($col2, $val2);
+		
+		if (!empty($col3))
+            $this->db->where($col3, $val3);
+			
+		$info = $this->db->get($table);
+		
         return $info->result_array();
     } 
 

@@ -21,6 +21,7 @@
                                             <th>SL</th>
                                             <th>Hotel Name</th>
                                             <th>Room No</th>
+                                            <th>Bed No</th>
                                             <th>Room Type</th>
                                             <th>Floor</th>
                                             <th>Rent</th>

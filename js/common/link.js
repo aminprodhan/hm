@@ -7,3 +7,7 @@ function links(){
     return li;
 
 }
+
+$(document).ready(function(){
+	//$("input").attr("autocomplete","off");
+});

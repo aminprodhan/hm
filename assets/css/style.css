@@ -362,7 +362,7 @@ table.table td h2 span {
 .panel {
     border: 1px solid #e7e7e7;
     box-shadow: 0 6px 15px rgba(36, 37, 38, 0.08);
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .form-horizontal .control-label:not(.text-right) {

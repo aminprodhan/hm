@@ -2,6 +2,77 @@
 
 var li=links();
 
+function getAllotmentCodeList(v){
+
+    var value=$("#"+v).val();
+
+    //alert(value);
+
+
+    /*$("#search_allot_id22").autocomplete({
+        source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+      });*/
+
+    $("#"+v).addClass('ac_loading');
+
+	$("#"+v).autocomplete({
+        source: function( request, response ) 
+        {
+
+            $.ajax({		
+                type:'POST',
+                dataType:'json',
+                url:li+'allotment_controller/getAllotmentCodeList/',
+                data:{id:value},
+                success:function(data)
+                    {
+                        //alert(data);
+                        response(data);
+                    },
+                    error:function(jqXHR, textStatus, errorThrown)
+                    {
+                        
+                        if (jqXHR.status === 0) {
+                            alert('Not connect.\n Verify Network.');
+                        } else if (jqXHR.status == 404) {
+                            alert('Requested page not found.');
+                        } else if (jqXHR.status == 500) {
+                            alert('Internal Server Error.');
+                        } else if (errorThrown === 'parsererror') {
+                            alert('Requested JSON parse failed');
+                        } else if (errorThrown === 'timeout') {
+                            alert('Time out error');
+                        } else if (errorThrown === 'abort') {
+                            alert('Ajax request aborted ');
+                        } else {
+                            alert('Uncaught Error.\n' + jqXHR.responseText);
+                        }
+                    }
+                });
+
+	            $("#"+v).removeClass('ac_loading');
+
+            },
+            select:function(event,ui){
+
+                $("#resv_allot_id").val(ui.item.label);
+                setTimeout(function(){
+
+                    $("#"+v).val('');
+
+                },100);
+                
+
+            }
+            
+            			
+         });
+         
+         $("#"+v).autocomplete( "option", "appendTo", ".auto_com" );
+
+
+}
+
 function viewAvailabilRoom(data,para){
 
 
@@ -16,6 +87,7 @@ function viewAvailabilRoom(data,para){
                 +"<td>"+(sl++)+"</td>"
                 +"<td>"+val.hotel_name+"</td>"
                 +"<td>"+val.room_no+"</td>"
+                +"<td>"+val.bed_no+"</td>"
                 +"<td>"+val.type_name+"</td>"
                 +"<td>"+val.floor_no+"</td>"
                 +"<td>"+val.rent+"</td>"
@@ -42,6 +114,126 @@ function viewAvailabilRoom(data,para){
 
 }
 
+function guestModalPreview(v){
+
+    $("#modalDivResvGuest").modal("show");
+
+}
+
+function removeGuestInfo(v){
+    var i=0;
+    var list=[];
+    $("#guest_list tr .chq_list").each(function(){
+
+       if($(this).is(":checked")){
+
+            var data_id=$(this).attr("data-target");
+            list[i++]=[data_id];
+       }
+
+    });
+
+   if(isEmpty(i) == '0')
+     alert("Data not found.....");
+    else{
+
+        var c=confirm("Are you sure to delete ?");
+        if(c == true){
+            
+            $("#"+v).attr("disabled",true);
+
+            var combine_ginfo=JSON.stringify(list);
+            
+            $.ajax({
+                type:'POST',
+                dataType:'json',
+                url: li+"reservation_controller/removeGuestInfo/",
+                cache: false,
+                data:{
+                    combine_ginfo:combine_ginfo,
+                },
+                success:function(data)
+                {
+                   window.location.reload();
+    
+                },
+                error:function(jqXHR, textStatus, errorThrown)
+                    { 
+                        $("#"+v).attr("disabled",false);
+                        showAjaxError(jqXHR, textStatus, errorThrown);
+                    }
+                });
+
+        }
+
+    }
+
+
+}
+
+function saveModalNewGuestInfo(v){
+
+
+    var guest_info=getModalGuestInfo();
+
+    
+    if(isEmpty(guest_info[0][0]) == '0')
+        alert("Reservation code is empty.....");
+    else if(isEmpty(guest_info[0][1]) == '0')
+        alert("Guest name is empty.....");
+    else if(isEmpty(guest_info[0][3]) == '0')
+        alert("Guest mobile no is empty.....");
+    else{
+
+        $("#"+v).attr("disabled",true);
+
+        var combine_ginfo=JSON.stringify(guest_info);
+        $.ajax({
+            type:'POST',
+            dataType:'json',
+            url: li+"reservation_controller/saveModalNewGuestInfo/",
+            cache: false,
+            data:{
+                combine_ginfo:combine_ginfo,
+            },
+            success:function(data)
+            {
+               window.location.reload();
+
+            },
+            error:function(jqXHR, textStatus, errorThrown)
+                { 
+                    $("#"+v).attr("disabled",false);
+                    showAjaxError(jqXHR, textStatus, errorThrown);
+                }
+            });
+
+
+    }
+
+}
+
+function getModalGuestInfo(){
+
+    var modal_guest_name=$("#modal_guest_name").val();
+    var modal_guest_email=$("#modal_guest_email").val();
+    var modal_guest_mobile_no=$("#modal_guest_mobile_no").val();
+    var modal_guest_address=$("#modal_guest_address").val();
+    var modal_guest_country=$("#modal_guest_country").val();
+    var modal_guest_identity_info=$("#modal_guest_identity_info").val();
+    //var guest_room_type=$("#modal_guest_doc_info").val();
+    var modal_guest_room_type=$("#modal_guest_room_type").val();
+    var resv_code=$("#resv_code").val();
+
+    
+    var guest_info=[];
+    guest_info[0]=[resv_code,modal_guest_name,modal_guest_email,
+        modal_guest_mobile_no,modal_guest_address,
+        modal_guest_country,modal_guest_identity_info,modal_guest_room_type];
+
+        return guest_info;
+}
+
 function viewReservationRoomList(data,para){
 
 
@@ -56,6 +248,7 @@ function viewReservationRoomList(data,para){
                 +"<td>"+val.start_date+"</td>"
                 +"<td>"+val.end_date+"</td>"
                 +"<td>"+val.room_no+"</td>"
+                +"<td>"+val.bed_no+"</td>"
                 +"<td>"+val.type_name+"</td>"
                 +"<td>"+val.floor_no+"</td>"
                 +"<td>"+val.rent+"</td>"
@@ -152,8 +345,11 @@ function getReservationInfo(){
     var number_of_adult=$("#number_of_adult").val();
     var number_of_children=$("#number_of_children").val();
     var room_type=1;
-    var resv_type=1;
+    var resv_type= $("#resv_type").val();
     var season=1;
+
+    var resv_allot_id=$("#resv_allot_id").val();
+
 
     //------------------------------
 
@@ -179,7 +375,7 @@ function getReservationInfo(){
         room_type,resv_type,
         guest_name,guest_email,guest_mobile_no,
         guest_address,guest_country,
-        guest_identity_info,guest_room_type];
+        guest_identity_info,guest_room_type,resv_allot_id];
 
 
     return resv_array;
@@ -213,6 +409,7 @@ function addRoomToSession(){
     var reservationInfo=JSON.stringify(getReservationInfo());
     var resv_code= $("#resv_code").val();
     
+
     //alert(reservationInfo);
     //alert(room_data);
 
@@ -268,20 +465,25 @@ function searchRoomForReservation(v){
     var room_end_date=$("#room_end_date").val();
     var searchRoomType=$("#searchRoomType").val();
 
+    var resv_allot_id=$("#resv_allot_id").val();
+    var resv_type=$("#resv_type").val();
+
+  //  alert(resv_type);
+
     $.ajax({
         type:'POST',
         dataType:'json',
         url: li+"room_controller/searchRoomForReservation/",
         cache: false,
         data:{
+            resv_allot_id:resv_allot_id,
             room_start_date:room_start_date,
             room_end_date:room_end_date,
             searchRoomType:searchRoomType,
+            resv_type:resv_type,
         },
         success:function(data)
         {
-
-            //alert("ok");
 
             $(v).attr("disabled",false);         
             viewAvailabilRoom(data);

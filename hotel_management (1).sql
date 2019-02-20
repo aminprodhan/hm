@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 19, 2019 at 03:12 AM
+-- Generation Time: Feb 18, 2019 at 04:23 AM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `payment_info` (
 
 INSERT INTO `payment_info` (`pay_id`, `pay_mode`, `date`, `tax`, `amount`, `remarks`, `ware`, `date_time`, `trace`, `resv_id`, `by`, `module`, `pay_type`) VALUES
 (1, 4, '2019-02-12', '1000', 3000, 'aaasdfdfsdf', 1, '2019-02-13 13:46:41', 0, 6, 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 0, 22),
-(2, 4, '2019-02-17', '12345', 233222, 'eeee', 1, '2019-02-18 12:50:47', 0, 1, 'Pc Name : DESKTOP-9L5J0VG,Ip Address: ::1, user id:1', 0, 24);
+(2, 4, '2019-02-17', '222', 233222, 'eeee', 1, '2019-02-17 18:23:46', 0, 1, 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 0, 24);
 
 -- --------------------------------------------------------
 
@@ -259,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `tbl_allotment` (
 --
 
 INSERT INTO `tbl_allotment` (`allot_id`, `isComplete`, `trace`, `agent_id`, `ware`, `allot_code`, `date`, `remarks`, `date_time`, `by`) VALUES
-(1, 1, 0, 1, 1, 'allot-201902-1', '2019-02-18', '', '2019-02-18 12:50:47', 'Pc Name : DESKTOP-9L5J0VG,Ip Address: ::1, user id:1');
+(1, 1, 0, 1, 1, 'allot-201902-1', '2019-02-17', '', '2019-02-17 18:23:46', 'Pc Name : cursor-PC,Ip Address: ::1, user id:1');
 
 -- --------------------------------------------------------
 
@@ -324,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `tbl_pay_bank_info` (
   `trace` int(11) NOT NULL,
   `module` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `tbl_pay_bank_info`
@@ -339,11 +339,7 @@ INSERT INTO `tbl_pay_bank_info` (`id`, `account_number`, `resv_id`, `pay_id`, `b
 (6, '2221111', 6, 1, '55555', '55555555ddd', '2019-02-13', '2222', 1, '2019-02-13 13:46:41', 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 0, 0),
 (7, '0222', 1, 2, '0222', '2222', '2019-02-17', '222', 1, '2019-02-17 18:22:36', 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 1, 0),
 (8, '0222', 1, 2, '0222', '2222', '2019-02-17', '222', 1, '2019-02-17 18:22:52', 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 1, 0),
-(9, '0222', 1, 2, '0222', '2222', '2019-02-17', '222', 1, '2019-02-17 18:23:46', 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 1, 0),
-(10, '0', 1, 2, '0', '', '1970-01-01', '0', 1, '2019-02-18 12:40:44', 'Pc Name : DESKTOP-9L5J0VG,Ip Address: ::1, user id:1', 1, 0),
-(11, '2345', 1, 2, '0', '', '1970-01-01', '0', 1, '2019-02-18 12:40:59', 'Pc Name : DESKTOP-9L5J0VG,Ip Address: ::1, user id:1', 1, 0),
-(12, '0', 1, 2, '0', '', '1970-01-01', 'abcd', 1, '2019-02-18 12:41:38', 'Pc Name : DESKTOP-9L5J0VG,Ip Address: ::1, user id:1', 1, 0),
-(13, '0', 1, 2, '0', '', '2019-02-01', 'abcd', 1, '2019-02-18 12:50:47', 'Pc Name : DESKTOP-9L5J0VG,Ip Address: ::1, user id:1', 0, 0);
+(9, '0222', 1, 2, '0222', '2222', '2019-02-17', '222', 1, '2019-02-17 18:23:46', 'Pc Name : cursor-PC,Ip Address: ::1, user id:1', 0, 0);
 
 -- --------------------------------------------------------
 

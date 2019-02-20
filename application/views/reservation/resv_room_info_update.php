@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4 class="page-title mn"><u>Room Information</u></h4>
+        <h4 class="page-title mn"><u>Update Room Information</u></h4>
     </div>
     <div class="panel-body">
         <div class="col-sm-12">
@@ -50,7 +50,38 @@
                         <th>Rent</th>
                     </tr>
                 </thead>
-                <tbody id="booked_room_list"></tbody>
+                <tbody id="booked_room_list">
+                
+                    <?php $sl=1; foreach($resv_list as $rl): ?>
+                        <tr>
+                            <td><?php echo $sl++; ?></td>
+                            <td>
+                                <?php echo $rl["hotel_name"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $rl["start_date"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $rl["end_date"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $rl["room_no"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $rl["bed_no"]; ?>
+                            </td>
+                            <td><?php echo $rl["type_name"]; ?></td>
+                            <td><?php echo $rl["floor_no"]; ?></td>
+                            <td><?php echo $rl["rent"]; ?></td>
+                            <td><input class='<?php echo $rl["rrid"] ?>-tr' type='checkbox' /></td>
+                        </tr>
+                    <?php endforeach; ?>
+                        <tr>
+                            <td colspan="9" style="text-align:right;">
+                                <button onclick='removeReservationRoom(this)' class='btn btn-warning'>Submit</button>
+                            </td>
+                        </tr>
+                </tbody>
             </table>
         </div>
     </div>

@@ -21,8 +21,22 @@ class Room_Controller extends CI_Controller
             $cnv_edate=strtotime($room_end_date);
 
             $searchRoomType=$_POST["searchRoomType"];
+            $resv_allot_id=$_POST["resv_allot_id"];
 
-            $res["list"]=$this->room_model->getAvailableRoomList($cnv_sdate,$cnv_edate,$searchRoomType);
+            $resv_type=$_POST["resv_type"];
+
+        //    $isBed=$this->common->getBedTypeId();
+          //  if($isBed == $resv_type){
+
+                   // join last query
+
+        //    }
+          //  else{
+                $allot_id=$this->common->anyName("tbl_allotment","allot_code",$resv_allot_id,"allot_id");
+                $res["list"]=$this->room_model->getAvailableRoomList($cnv_sdate,$cnv_edate,$searchRoomType,$allot_id,$resv_type);
+          //  }
+
+          
             echo json_encode($res);
             
         }
@@ -38,6 +52,7 @@ class Room_Controller extends CI_Controller
         $cnv_edate=strtotime($room_end_date);
 
         $resv_id=$isUpdate=$_POST["resv_code"];
+       // $resv_type=$_POST["resv_type"];
 
         $reservationInfo = json_decode(stripslashes($_POST['reservationInfo']));
         
@@ -55,7 +70,6 @@ class Room_Controller extends CI_Controller
                 "children" => $val[4],
                 "season" => $val[5],
                 "room_type" => $val[6],
-                "resv_type" => $val[7],
                 "date_time" => $this->common->getCurrentDateTime(),
                 "by" => $this->common->getUserAddress(),
             );
@@ -63,6 +77,8 @@ class Room_Controller extends CI_Controller
             if(empty($resv_id)){
 
                 $data_resv["resv_code"]=$resv_code;
+                $data_resv["resv_type"]=$val[7];
+
                 $this->db->insert("tbl_reservation",$data_resv);
                 $resv_id=$this->db->insert_id();
             }
@@ -73,6 +89,9 @@ class Room_Controller extends CI_Controller
                 $this->db->update("tbl_reservation",$data_resv);
                // $resv_id= $resv_code;
             }
+
+
+            $resv_type=$this->common->anyName("tbl_reservation","resv_id",$resv_id,"resv_type");
 
             $data_guest=array(
                 "ware" => $w,
@@ -102,18 +121,35 @@ class Room_Controller extends CI_Controller
 
         if($resv_id > 0){
             foreach($room_data as $r){
-             $room_rent=$this->common->getDataRow("tbl_room_info","id",$r[0],"rent");   
-             
-             $rtype=0;
-             if(!empty($room_rent->room_type))
-                $rtype=$room_rent->room_type;
-                
-            $rent=0;
-                if(!empty($room_rent->rent))
-                   $rent=$room_rent->rent;
 
-            $isValidReservation=$this->room_model->checkingIsValid($cnv_sdate,$cnv_edate,$r[0]);       
+
+                $rtype=0;
+                $isBed=$this->common->getBedTypeId();
+                if($isBed == $resv_type){
+                    $info=$this->common->getDataRow("tbl_room_bed_info","bed_id",$r[0],"bed_id");
+                    if(!empty($info->bed_type))
+                        $rtype=$info->bed_type;
+                }
+                else {
+                    $info=$this->common->getDataRow("tbl_room_info","id",$r[0],"id");
+                    if(!empty($info->room_type))
+                        $rtype=$info->room_type;
+                }
+
+     
+
+
+        $room_rent=$this->common->getRoomRent($resv_type,$r[0]);
+            $rent=0;
+                if(!empty($room_rent->urent))
+                    $rent=$room_rent->urent;
+
+              //  echo $rtype;
+
+           $isValidReservation=$this->room_model->checkingIsValid($cnv_sdate,$cnv_edate,$r[0],"",$resv_type);
+
             if(empty($isValidReservation)){
+
                 $data_resv=array(
                     
                     "ware" => $w,
@@ -124,6 +160,7 @@ class Room_Controller extends CI_Controller
                     "season" => $val[5],
                     "rent" => $rent,
                     "room_type" => $rtype,
+                    "resv_type" => $resv_type,
                     "conv_start_datetime" => $cnv_sdate,
                     "conv_end_datetime" => $cnv_edate,
                     "date_time" => $this->common->getCurrentDateTime(),

@@ -4,6 +4,13 @@
     </div>
     <div class="panel-body">
         <div class="col-sm-12">
+
+            <div class="row">
+                <label for="exampleInputEmail1">Allotment Id</label>
+               <input disabled value="0" class="form-control" id="resv_allot_id" placeholder="Allotment Id">
+                <small id="error_txtHotel" class="form-text text-muted"></small>
+            </div>
+
             <div class="row">
                 <label for="exampleInputEmail1">Hotel List</label>
                 <select id="hid" class="form-control"></select>
@@ -18,7 +25,15 @@
 
             <div class="row">
                 <label for="exampleInputEmail1">Agent List</label>
-                <select id="agent_list" class="form-control"></select>
+                <select id="agent_list" name="agent" class="form-control">
+                            <option value="0"></option>
+                            <?php foreach($agent_list as $a): ?>
+                                <option 
+                                    value="<?php echo $a["id"] ?>">
+                                    <?php echo $a["name"]; ?>
+                                </option>
+                            <?php endforeach; ?>
+                </select>
                 <small id="error_txtHotel" class="form-text text-muted"></small>
             </div>
 
@@ -36,7 +51,14 @@
 
              <div class="row">
                 <label for="exampleInputEmail1">Resv.Type</label>
-                <select id="resv_type" class="form-control"></select>
+                <select id="resv_type" class="form-control">
+                    <?php foreach($reservation_type as $a): ?>
+                        <option 
+                            value="<?php echo $a["id"] ?>">
+                            <?php echo $a["type_name"]; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
 
             </div>
 

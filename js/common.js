@@ -17,6 +17,16 @@ function divAlert(div_id){
 
 }
 
+
+function isEmpty(v){
+
+    if(v == '0' || v == '' || v === null || typeof v == 'undefined')
+        return 0;
+    
+    return 1;
+
+}
+
 function showAjaxError(jqXHR, textStatus, errorThrown){
 
     

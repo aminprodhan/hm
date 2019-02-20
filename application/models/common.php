@@ -9,6 +9,87 @@
 
             }
 
+            public function getReservationModule(){
+                return 1;
+            }
+
+            public function getPayCheckInType(){
+                return 25;
+            }
+
+            public function getBedTypeId(){
+                return 11;
+            }
+
+            public function getRoomType(){
+                return 20;
+            }
+
+            public function getRoomReservationTypeId(){
+                return 26;
+            }
+
+            public function getRoomReservationType(){
+                return 22;
+            }
+            public function getBankPayModeId(){
+                return 4;
+            }
+
+            public function getBkashPayModeId(){
+                return 5;
+            }
+
+            public function getAllotmentType(){
+                return 24;
+            }
+
+            public function getDefaultReservationType(){
+                return 10;
+            }
+
+
+            public function getSeasonInfo($rm=null){
+
+                $w = $this->getSessionUserList(1);
+
+                $room_id="";
+                if(!empty($rm))
+                    $room_id=" and rent_room_id='".$rm."'";
+
+                $sql="
+                select  season_id,rent_room_id,rent as urent from (
+                    select * from (
+                    select r.rent_room_id,r.rent,s.start_date,s.end_date,s.id as season_id from tbl_rent as r 
+                         join sett_season as s on r.rent_season=s.id 
+                             where r.trace='0' and (r.ware='0' or r.ware='".$w."') 
+                               and s.trace='0' and (s.ware='0' or s.ware='".$w."')
+                             order by s.start_date desc ) as t order by end_date desc 
+                             
+                             ) as t where 1 ".$room_id." group by rent_room_id";
+
+                return $this->db->query($sql)->row();
+
+            }
+
+            public function getRoomRent($resv_type_col,$room_id){
+
+                $w = $this->getSessionUserList(1);
+
+                $sql_rent="
+                select rent_room_id,rent as urent from (
+                      select * from (
+                          select r.rent_room_id,r.rent,s.start_date,s.end_date from tbl_rent as r
+                           join sett_season as s on r.rent_season=s.id 
+                               where r.trace='0' and (r.ware='0' or r.ware='".$w."') 
+                                 and s.trace='0' and (s.ware='0' or s.ware='".$w."') and r.resv_type='".$resv_type_col."'
+                               order by s.start_date desc ) as t order by end_date desc                             
+                               ) as t where rent_room_id='".$room_id."' group by rent_room_id";
+                        //return $sql_rent;
+                return $info = $this->db->query($sql_rent)->row();
+
+            }
+
             public function getDataRow($table, $col, $id, $name, $col2 = null, $id2 = null, $col3 = null, $id3 = null) {
                 //$w = $this->session->userdata('wire');
                 $w = $this->getSessionUserList(1);
@@ -25,8 +106,29 @@
                 $this->db->where("(ware='" . $w . "' OR ware='0')");
                 
                 $this->db->where($col, $id);
+
                return $info = $this->db->get($table)->row();
                
+            }
+
+            public function getAllotmentCode(){
+
+                $w = $this->getSessionUserList(1);
+
+                $sql="SELECT concat('allot-201902-', (
+                    resv_code  + 1 )
+                     ) AS code from(
+                     select ifNull(max(allot_id),'0') as resv_code 
+                     from tbl_allotment 
+                       where ware='".$w."' and trace='0') as t";
+
+              $q=$this->db->query($sql)->row();
+              
+              if(!empty($q->code))
+                return $q->code;
+
+                return 0;
+
             }
 
             public function getReservationCode(){
@@ -34,7 +136,7 @@
                 $w = $this->getSessionUserList(1);
 
                 $sql="SELECT concat('resv-201902-', (
-                    resv_code  +1 )
+                    resv_code  + 1 )
                      ) AS code from(
                      select ifNull(max(resv_id),'0') as resv_code 
                      from tbl_reservation where ware='".$w."' and trace='0') as t";
